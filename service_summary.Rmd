@@ -1,0 +1,63 @@
+---
+title: "Documenting a Synthetic Auto Service Summary Script"
+author: "Obada Alaswad"
+output: html_document
+---
+
+AI Assistance Declaration: I used ChatGPT (OpenAI; model version not displayed; November 18, 2026) for formatting suggestions, section organization and example explanatory wording. Prompts used: see `Appendix_AI.md`. I verified the script text and Markdown structure by manual inspection; knitting in RStudio or Posit Cloud remains to be completed. All final calculations are done by myself. I am responsible for the accuracy and originality of this work.
+
+# Purpose
+
+This document explains `service_summary.R`, a small base-R script for counting service visits in a **synthetic** dataset. It demonstrates readable documentation and does not use customer records.
+
+## Inputs
+
+The script does not need an external CSV. It creates a fixed `visits` data frame with:
+
+- `visit_id`: a made-up identifier for each visit.
+- `service_type`: an invented service category such as Tires or Brakes.
+
+## Method
+
+The first code chunk shows how the synthetic input is made. It is illustrative and is not executed while knitting, so the documentation can preview without changing the environment.
+
+```{r create-input, eval=FALSE}
+visits <- data.frame(
+  visit_id = sprintf("S%02d", 1:12),
+  service_type = c("Oil change", "Brakes", "Tires", "Oil change",
+                   "Battery", "Tires", "Brakes", "Oil change",
+                   "Tires", "Battery", "Oil change", "Brakes"),
+  stringsAsFactors = FALSE
+)
+```
+
+The next chunk groups rows by service type and counts them. This is also an explanation of code, not a claim of independently calculated results.
+
+```{r count-services, eval=FALSE}
+service_counts <- aggregate(
+  visits$visit_id,
+  by = list(service_type = visits$service_type),
+  FUN = length
+)
+names(service_counts)[2] <- "visits"
+print(service_counts)
+```
+
+## Outputs
+
+The script prints `service_counts`, with one row per service category and two columns: `service_type` and `visits`. Open R and run the script to obtain and personally check numerical results.
+
+## How to Run
+
+1. Place `service_summary.R` and this document in the same folder.
+2. Run `source("service_summary.R")` in RStudio or Posit Cloud.
+3. Check that each category appears once and that the individual category counts add up to the number of synthetic input rows.
+4. Knit this document to HTML and check the headings, bullet list and two R code chunks.
+
+## Limitations
+
+The records are invented and intentionally small. This script is not suitable for drawing conclusions about real service demand. The displayed chunks have `eval=FALSE` to keep the knitted document focused on explanation; execute the actual `.R` script separately for results.
+
+## Documentation and AI Review
+
+AI suggested headings for Purpose, Inputs and Outputs and fenced R code examples. I reorganized the instructions into a run sequence, clarified the dataset is synthetic, and distinguished a syntax review from a successful knit. See `Appendix_AI.md` for all prompts and the verification log.
